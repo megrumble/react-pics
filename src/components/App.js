@@ -1,6 +1,7 @@
 import React from 'react';
-import axios from 'axios';
+import unsplash from '../api/unsplash';
 import SearchBar from './SearchBar';
+import ImageList from './ImageList';
 
 class App extends React.Component {
     //initialize state with images as an array so we can later utilize array functions
@@ -8,13 +9,11 @@ class App extends React.Component {
     //use async/await to allow asynchronous activity
     //this needs to be an arrow function in order to bind to this keyword
     onSearchSubmit = async (term) => {
-        const response = await axios.get('https://api.unsplash.com/search/photos', {
+        const response = await unsplash.get('/search/photos', {
             params: {
                 query: term
             },
-            headers: {
-                Authorization: 'Client-ID d157da64a146c90314bff6959e69ac47438a34dbf56db5073520db421815c851'
-            }
+            
         });
         //setState to return an array of images
         this.setState ({ images: response.data.results });
@@ -28,7 +27,7 @@ class App extends React.Component {
                 marginTop: '10px'
             }}>
                 <SearchBar onSubmit={this.onSearchSubmit}/>
-                Found: {this.state.images.length} images
+                <ImageList images={this.state.images}/>
             </div>
         );
     };
